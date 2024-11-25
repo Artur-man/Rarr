@@ -12,11 +12,12 @@ Mike L. Smith
   - [Writing to a Zarr array](#writing-to-a-zarr-array)
 - [Current Status](#current-status)
   - [Reading and Writing](#reading-and-writing)
+- [Required system libraries](#required-system-libraries)
 
 <!-- badges: start -->
 
-|                                                                      GitHub Actions                                                                       |                                                             Bioconductor Build Sysytem                                                              |                                                                    Test Coverage                                                                     |
-|:---------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------:|
+| GitHub Actions | Bioconductor Build Sysytem | Test Coverage |
+|:--:|:--:|:--:|
 | [![Package Checks](https://github.com/grimbough/Rarr/actions/workflows/main.yml/badge.svg)](https://github.com/grimbough/Rarr/actions/workflows/main.yml) | [![Bioconductor Status](https://bioconductor.org/shields/build/devel/bioc/Rarr.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/Rarr/) | [![Codecov test coverage](https://codecov.io/gh/grimbough/Rarr/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/grimbough/Rarr?branch=devel) |
 
 <!-- badges: end -->
@@ -98,7 +99,7 @@ zarr_overview(zarr_example)
 ```
 
     ## Type: Array
-    ## Path: /tmp/RtmpF5o9TP/temp_libpath14ca86d0ed64a/Rarr/extdata/zarr_examples/column-first/int32.zarr
+    ## Path: /mnt/data/R-lib/4.5-bioc_3.21/Rarr/extdata/zarr_examples/column-first/int32.zarr
     ## Shape: 30 x 20 x 10
     ## Chunk Shape: 10 x 10 x 5
     ## No. of Chunks: 12 (3 x 2 x 2)
@@ -255,38 +256,38 @@ requiring conversion from the Zarr datatype. The table below summarises
 the current status of datatype support. It will be updated as progress
 is made.
 
-| Zarr Data Type        | Status<br/>(reading / writing) | Notes                                                                                                                                                                           |
-|-----------------------|:------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `boolean`             |             ✔ / ❌             |                                                                                                                                                                                 |
-| `int8`                |             ✔ / ❌             |                                                                                                                                                                                 |
-| `uint8`               |             ✔ / ❌             |                                                                                                                                                                                 |
-| `int16`               |             ✔ / ❌             |                                                                                                                                                                                 |
-| `uint16`              |             ✔ / ❌             |                                                                                                                                                                                 |
-| `int32`               |             ✔ / ✔              |                                                                                                                                                                                 |
-| `uint32`              |             ✔ / ❌             | Values outside the range of `int32` are converted to `NA`. Future plan is to allow conversion to `double` or use the [bit64](https://cran.r-project.org/package=bit64) package. |
-| `int64`               |             ✔ / ❌             | Values outside the range of `int32` are converted to `NA`. Future plan is to allow conversion to `double` or use the [bit64](https://cran.r-project.org/package=bit64) package. |
-| `uint64`              |             ✔ / ❌             | Values outside the range of `int32` are converted to `NA`. Future plan is to allow conversion to `double` or use the [bit64](https://cran.r-project.org/package=bit64) package. |
-| `half` / `float16`    |             ✔ / ❌             | Converted to `double` in R. No effort is made to assess loss of precision due to conversion.                                                                                    |
-| `single` / `float32`  |             ✔ / ❌             | Converted to `double` in R. No effort is made to assess loss of precision due to conversion.                                                                                    |
-| `double` / `float64`  |             ✔ / ✔              |                                                                                                                                                                                 |
-| `complex`             |            ❌ / ❌             |                                                                                                                                                                                 |
-| `timedelta`           |            ❌ / ❌             |                                                                                                                                                                                 |
-| `datetime`            |            ❌ / ❌             |                                                                                                                                                                                 |
-| `string`              |             ✔ / ✔              |                                                                                                                                                                                 |
-| `Unicode`             |             ✔ / ✔              |                                                                                                                                                                                 |
-| `void *`              |            ❌ / ❌             |                                                                                                                                                                                 |
-| Structured data types |            ❌ / ❌             |                                                                                                                                                                                 |
+| Zarr Data Type | Status<br/>(reading / writing) | Notes |
+|----|:--:|----|
+| `boolean` | ✔ / ❌ |  |
+| `int8` | ✔ / ❌ |  |
+| `uint8` | ✔ / ❌ |  |
+| `int16` | ✔ / ❌ |  |
+| `uint16` | ✔ / ❌ |  |
+| `int32` | ✔ / ✔ |  |
+| `uint32` | ✔ / ❌ | Values outside the range of `int32` are converted to `NA`. Future plan is to allow conversion to `double` or use the [bit64](https://cran.r-project.org/package=bit64) package. |
+| `int64` | ✔ / ❌ | Values outside the range of `int32` are converted to `NA`. Future plan is to allow conversion to `double` or use the [bit64](https://cran.r-project.org/package=bit64) package. |
+| `uint64` | ✔ / ❌ | Values outside the range of `int32` are converted to `NA`. Future plan is to allow conversion to `double` or use the [bit64](https://cran.r-project.org/package=bit64) package. |
+| `half` / `float16` | ✔ / ❌ | Converted to `double` in R. No effort is made to assess loss of precision due to conversion. |
+| `single` / `float32` | ✔ / ❌ | Converted to `double` in R. No effort is made to assess loss of precision due to conversion. |
+| `double` / `float64` | ✔ / ✔ |  |
+| `complex` | ❌ / ❌ |  |
+| `timedelta` | ❌ / ❌ |  |
+| `datetime` | ❌ / ❌ |  |
+| `string` | ✔ / ✔ |  |
+| `Unicode` | ✔ / ✔ |  |
+| `void *` | ❌ / ❌ |  |
+| Structured data types | ❌ / ❌ |  |
 
 ### Compression Tools
 
-| Data Type     | Status<br/>(reading / writing) | Notes                                                                                                 |
-|---------------|:------------------------------:|-------------------------------------------------------------------------------------------------------|
-| `zlib / gzip` |             ✔ / ✔              | Only system default compression level (normally 6) is enabled for writing.                            |
-| `bzip2`       |             ✔ / ✔              | Only compression level 9 is enabled for writing.                                                      |
-| `blosc`       |             ✔ / ✔              | Only `lz4` compression level 5 is enabled for writing.                                                |
-| `LZMA`        |             ✔ / ✔              |                                                                                                       |
-| `LZ4`         |             ✔ / ✔              |                                                                                                       |
-| `Zstd`        |            ❌ / ❌             | Algorithm is available via blosc for writing, but can’t currently be accessed through the R interface |
+| Data Type | Status<br/>(reading / writing) | Notes |
+|----|:--:|----|
+| `zlib / gzip` | ✔ / ✔ | Only system default compression level (normally 6) is enabled for writing. |
+| `bzip2` | ✔ / ✔ | Only compression level 9 is enabled for writing. |
+| `blosc` | ✔ / ✔ | Only `lz4` compression level 5 is enabled for writing. |
+| `LZMA` | ✔ / ✔ |  |
+| `LZ4` | ✔ / ✔ |  |
+| `Zstd` | ✔ / ✔ |  |
 
 Please open an [issue](https://github.com/grimbough/Rarr/issues) if
 support for a required compression tool is missing.
@@ -296,6 +297,20 @@ support for a required compression tool is missing.
 The is currently no support for additional filters. Please open an
 [issue](https://github.com/grimbough/Rarr/issues) if you require filter
 support.
+
+# Required system libraries
+
+To provide support for BLOSC and zstd compression tools Rarr links
+against libraries providing these tools. If you have them installed on
+your system Rarr will attempt to use those versions. If they are not
+detected then Rarr will compile and use versions that are distributed
+with the package. Either way the functionality will available, however
+if you are using the system libraries and then later remove them Rarr
+may fail to work correctly.
+
+This only concerns users installing the package from source. If you are
+using the pre-built binaries for Windows or Mac OSX distributed by
+Bioconductor then this should not be an issue for you.
 
 [^1]: you only need to do the installation step once
 
