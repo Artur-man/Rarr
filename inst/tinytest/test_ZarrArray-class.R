@@ -12,7 +12,6 @@ expect_equal(chunkdim(z1), chunk_dim)
 ## input and output path are not the same on all platforms e.g. Windows
 ## as we follow the Zarr spec rules for normalizing
 expect_equal(path(z1), Rarr:::.normalize_array_path(tf1))
-expect_equal(normalizePath(path(z1)), tf1)
 
 # ways to get the array from disk to memory
 expect_equal(extract_array(z1, index = list(NULL, NULL)), m)

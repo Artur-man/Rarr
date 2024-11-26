@@ -65,14 +65,14 @@ jobs:
         shell: Rscript {0}
         
       - name: Upload built package binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{runner.os}}-binary
           path: |
             ${{ steps.build-install-check.outputs.package-binary }}
             
       - name: Upload built package binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: runner.os == 'Linux'
         with:
           name: BiocCheck
