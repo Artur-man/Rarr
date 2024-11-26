@@ -73,7 +73,7 @@ jobs:
             
       - name: Upload built package binary
         uses: actions/upload-artifact@v4
-        if: runner.os == 'Linux'
+        if: ${{ runner.os == 'linux' && matrix.config.sys-libs == 'false' }}
         with:
           name: BiocCheck
           path: |
