@@ -21,8 +21,8 @@ jobs:
         config:
         - { os: windows-2022, bioc-version: 'devel'}
         - { os: macOS-latest, bioc-version: 'devel'}
-        - { os: ubuntu-22.04, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor', sys-libs: 'false'}
-        - { os: ubuntu-22.04, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor', sys-libs: 'true'}
+        - { os: ubuntu-22.04, bioc-version: 'devel', bioc-mirror: 'https://bioconductor.posit.co/', sys-libs: 'false'}
+        - { os: ubuntu-22.04, bioc-version: 'devel', bioc-mirror: 'https://bioconductor.posit.co/', sys-libs: 'true'}
         
     steps:
       - name: Configure git
@@ -71,7 +71,7 @@ jobs:
           path: |
             ${{ steps.build-install-check.outputs.package-binary }}
             
-      - name: Upload built package binary
+      - name: Upload BiocCheck results
         uses: actions/upload-artifact@v4
         if: ${{ runner.os == 'linux' && matrix.config.sys-libs == 'false' }}
         with:
