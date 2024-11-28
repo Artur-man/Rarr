@@ -43,7 +43,7 @@ jobs:
         uses: grimbough/bioc-actions/setup-bioc@v1
         with:
           bioc-version: ${{ matrix.config.bioc-version }}
-          bioc-mirror: https://ftp.gwdg.de/pub/misc/bioconductor
+          bioc-mirror: ${{ matrix.config.bioc-mirror }}
           
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -66,6 +66,7 @@ jobs:
         
       - name: Upload built package binary
         uses: actions/upload-artifact@v4
+        if: ${{ !(runner.os == 'linux' && matrix.config.sys-libs == 'true') }}
         with:
           name: ${{runner.os}}-binary
           path: |
