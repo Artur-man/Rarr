@@ -73,7 +73,7 @@ SEXP decompress_chunk_ZSTD(SEXP input, SEXP _outbuffersize) {
   /*  set the length of our output vector the actual number of decompressed
   bytes.  _outbuffersize is an upper bound based on the chunk size and 
   datatyp */
-  SETLENGTH(output, dsize);
+  SET_LENGTH(output, dsize);
   
   UNPROTECT(1);
   return output;

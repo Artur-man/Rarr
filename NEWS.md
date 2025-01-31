@@ -2,6 +2,7 @@
 
 * Added `path()` method for `ZarrArray` class that returns the location of the
   zarr array root.
+* Removed used of non-API call `SETLENGTH` in C code.
 
 # Rarr 1.5
 
