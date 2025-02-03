@@ -48,8 +48,8 @@ jobs:
             --env PKG=${{ env.PKG }}
           run: |
             echo "options(Ncpus=4L, timeout = 300)" >> ~/.Rprofile
-            ## devtools comes pre-installed in the Bioconductor Docker images
-            Rscript -e "library(devtools)" \
+            ## remotes comes pre-installed in the Docker images
+            Rscript -e "library(remotes)" \
                     -e "dev_package_deps('/build/${PKG}', dependencies = TRUE) |> update(upgrade = 'always')"
             
   check-arm64:
