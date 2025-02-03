@@ -20,5 +20,9 @@ src/compression_tools/blosc/lib/blosc-*/Makefile
 src/compression_tools/blosc/lib/snappy-*/Makefile
 
 ## caches
+inst/rmd/*
 vignettes/*_cache
 README_cache
+
+## html
+inst/**/*.html
