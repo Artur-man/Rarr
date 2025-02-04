@@ -36,7 +36,7 @@ jobs:
             R_lib-ARM64-${{ hashFiles('**/DESCRIPTION') }}
             R_lib-ARM64-
       
-      - name: Run the build process with Docker
+      - name: Install package dependencies
         uses: addnab/docker-run-action@v3
         with:
           image: ghcr.io/grimbough/bioc-with-tinytex:devel-arm64
@@ -49,8 +49,7 @@ jobs:
           run: |
             echo "options(Ncpus=4L, timeout = 300)" >> ~/.Rprofile
             ## remotes comes pre-installed in the Docker images
-            Rscript -e "library(remotes)" \
-                    -e "dev_package_deps('/build/${PKG}', dependencies = TRUE) |> update(upgrade = 'always')"
+            Rscript -e "BiocManager::install('${PKG}', dependencies = TRUE)"
             
   check-arm64:
     name: Test package on ARM64
