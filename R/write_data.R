@@ -1,4 +1,4 @@
-.check_datatype <- function(data_type, fill_value, nchar) {
+.check_datatype <- function(data_type, fill_value, nchar = NULL) {
   if (missing(data_type) && missing(fill_value)) {
     stop("Data type cannot be determined if both 'data_type' and 'fill_value' arguments are missing.")
   } else if (missing(data_type) && !missing(fill_value)) {
@@ -32,7 +32,7 @@
   }
 
   if (data_type %in% c("|S", "<U", ">U")) {
-    if (is.null(nchar) || missing(nchar) || nchar < 1) {
+    if (is.null(nchar) || nchar < 1) {
       stop("The 'nchar' argument must be provided and be a positive integer")
     }
     data_type <- paste0(data_type, as.integer(nchar))
