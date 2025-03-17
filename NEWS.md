@@ -2,6 +2,9 @@
 
 * Added `path()` method for `ZarrArray` class that returns the location of the
   zarr array root.
+* Removed used of non-API call `SETLENGTH` in C code.
+* Small changes to compilation of internal blosc libraries to cope with
+  the C23 compiler becoming the default in R-4.5.0
 
 # Rarr 1.5
 

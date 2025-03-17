@@ -19,7 +19,7 @@ SEXP compress_chunk_BLOSC(SEXP input, SEXP type_size) {
 
   if(dsize > 0) {
     /* shrink our output buffer to contain only the compressed bytes */
-    SETLENGTH(output, dsize);
+    SET_LENGTH(output, dsize);
   } else if(dsize == 0) {
     /* if compression results in a bigger chunk, just use the original input */
     p_output = p_input;
@@ -51,7 +51,7 @@ SEXP compress_chunk_LZ4(SEXP input) {
   }
   
   /* shrink our output vector to include only the compressed bytes */
-  SETLENGTH(output, dsize);
+  SET_LENGTH(output, dsize);
 
   UNPROTECT(1);
   return output;
@@ -85,7 +85,7 @@ SEXP compress_chunk_ZSTD(SEXP input, SEXP compression_level) {
   }
   
   /* shrink our output vector to include only the compressed bytes */
-  SETLENGTH(output, dsize);
+  SET_LENGTH(output, dsize);
   
   UNPROTECT(1);
   return output;
