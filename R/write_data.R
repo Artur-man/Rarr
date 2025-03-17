@@ -296,7 +296,7 @@ update_zarr_array <- function(zarr_array_path, x, index) {
   x <- array(x, dim = vapply(index, length, integer(1)))
 
   ## create all possible chunk names, then remove those that won't be touched
-  chunk_names <- expand.grid(lapply(zarr_dim %/% chunk_dim, seq_len)) - 1
+  chunk_names <- expand.grid(lapply(ceiling(zarr_dim / chunk_dim), seq_len)) - 1
   chunk_needed <- rep(FALSE, nrow(chunk_names))
   
   ## determine which chunk each of the requests indices belongs to
