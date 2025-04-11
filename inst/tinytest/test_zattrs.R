@@ -1,8 +1,11 @@
-# create zarr
+# create zarr array
 dir.create(td <- tempfile())
-name <- "test"
-path <- file.path(td, paste0(name, ".zarr"))
-create_zarr(dir = td, prefix = name)
+path <- file.path(td, "test.zarr")
+x <- array(runif(n = 10), dim = c(2, 5))
+res <- write_zarr_array(
+  x = x, zarr_array_path = path,
+  chunk_dim = c(2, 5)
+)
 
 # add .zattrs to /
 zattrs <- list(foo = "foo", bar = "bar")
@@ -31,18 +34,5 @@ zattrs.new.elem <- list(foo2 = "foo")
 write_zattrs(path = path, new.zattrs = zattrs.new.elem, overwrite = FALSE)
 read.zattrs <- read_zattrs(path)
 zattrs[names(zattrs.new.elem)] <- "foo2"
-expect_equal(read.zattrs, c(zattrs))
-
-# add .zattrs to array
-x <- array(runif(n = 10), dim = c(2, 5))
-res <- write_zarr_array(
-  x = x, zarr_array_path = file.path(path, "array"),
-  chunk_dim = c(2, 5)
-)
-zattrs <- list(foo = "foo", bar = "bar")
-array.path <- file.path(path, "array")
-write_zattrs(path = array.path, zattrs)
-expect_true(file.exists(file.path(array.path, ".zattrs")))
-read.zattrs <- read_zattrs(array.path)
 expect_equal(read.zattrs, c(zattrs))
 
