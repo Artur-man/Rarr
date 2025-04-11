@@ -242,7 +242,7 @@ update_fill_value <- function(metadata) {
 
 #' Read the .zattrs file associated with a Zarr array or group
 #' 
-#' @param path A character vector of length 1.  This provides the
+#' @param path A character vector of length 1. This provides the
 #'   path to a Zarr array or group. This can either be on a local file
 #'   system or on S3 storage.
 #' @param s3_client A list representing an S3 client.  This should be produced
@@ -253,24 +253,24 @@ update_fill_value <- function(metadata) {
 #' @importFrom jsonlite read_json fromJSON
 #' @importFrom stringr str_extract str_remove
 #'
-#' @keywords Internal
-read_attrs <- function(path, s3_client = NULL) {
+#' @export
+read_zattrs <- function(path, s3_client = NULL) {
   path <- .normalize_array_path(path)
-  zarray_path <- paste0(path, ".zattrs")
+  zattrs_path <- paste0(path, ".zattrs")
   
-  if(!file.exists(zarray_path))
+  if(!file.exists(zattrs_path))
     stop("The group or array does not contain attributes (.zattrs)")
   
   if (!is.null(s3_client)) {
     
-    parsed_url <- parse_s3_path(zarray_path)
+    parsed_url <- parse_s3_path(zattrs_path)
     
     s3_object <- s3_client$get_object(Bucket = parsed_url$bucket, 
                                       Key = parsed_url$object)
     
-    metadata <- fromJSON(rawToChar(s3_object$Body))
+    zattrs <- fromJSON(rawToChar(s3_object$Body))
   } else {
-    metadata <- read_json(zarray_path)
+    zattrs <- read_json(zattrs_path)
   }
-  return(metadata)
+  return(zattrs)
 }

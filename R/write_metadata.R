@@ -30,6 +30,42 @@
     write(x = json, file = path)
 }
 
+#' Read the .zattrs file associated with a Zarr array or group
+#' 
+#' @param path A character vector of length 1. This provides the
+#'   path to a Zarr array or group. 
+#' @param new.zattrs a list inserted to .zattrs at the \code{path}.
+#' @param overwrite if TRUE, existing .zattrs elements will be overwritten by \code{new.zattrs}.
+#' 
+#' @importFrom jsonlite toJSON
+#'
+#' @export
+write_zattrs <- function(path, new.zattrs = list(), overwrite = TRUE){
+  path <- .normalize_array_path(path)
+  zattrs_path <- paste0(path, ".zattrs")
+  
+  if(is.null(names(new.zattrs)))
+    stop("list elements should be named")
+  
+  if("" %in% names(new.zattrs)){
+    message("Ignoring unnamed list elements")
+    new.zattrs <- new.zattrs[which(names(new.zattrs == ""))]
+  }
+    
+  if(file.exists(zattrs_path)){
+    old.zattrs <- read_json(zattrs_path)
+    if(overwrite){
+      old.zattrs <- old.zattrs[setdiff(names(old.zattrs), names(new.zattrs))]
+    } else {
+      new.zattrs <- new.zattrs[setdiff(names(new.zattrs), names(old.zattrs))] 
+    }
+    new.zattrs <- c(old.zattrs, new.zattrs)
+  }
+  
+  json <- .format_json(toJSON(new.zattrs, auto_unbox = TRUE, pretty = TRUE, null = "null"))
+  write(x = json, file = zattrs_path)
+}
+
 .format_json <- function(json) {
     json <- gsub(x = json, pattern = "[", replacement = "[\n    ", fixed = TRUE)
     json <- gsub(x = json, pattern = "],", replacement = "\n  ],", fixed = TRUE)
