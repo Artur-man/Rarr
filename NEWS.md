@@ -1,3 +1,8 @@
+# Rarr 1.9.2
+
+* `writeZarrArray()` now allows writing character arrays, and no longer error 
+  complaining about missing 'nchar' argument value.
+
 # Rarr 1.9
 
 * Updated `.url_parse_other()` to account for port numbers in host name and 
