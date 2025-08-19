@@ -1,7 +1,8 @@
 # Rarr 1.9.2
 
 * `writeZarrArray()` now allows writing character arrays, and no longer error 
-  complaining about missing 'nchar' argument value.
+  complaining about null 'nchar' argument value. Default of 'nchar' is now
+  `NULL`.
 
 # Rarr 1.9
 
