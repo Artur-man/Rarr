@@ -1,4 +1,4 @@
-.check_datatype <- function(data_type, fill_value, nchar) {
+.check_datatype <- function(data_type, fill_value, nchar = NULL) {
   if (missing(data_type) && missing(fill_value)) {
     stop("Data type cannot be determined if both 'data_type' and 'fill_value' arguments are missing.")
   } else if (missing(data_type) && !missing(fill_value)) {
@@ -32,8 +32,9 @@
   }
 
   if (data_type %in% c("|S", "<U", ">U")) {
-    if (missing(nchar) || nchar < 1) {
-      stop("The 'nchar' argument must be provided and be a positive integer")
+    if (is.null(nchar) || nchar < 1) {
+      stop("The 'nchar' argument must be provided when working with ",
+           "character data types and be a positive integer")
     }
     data_type <- paste0(data_type, as.integer(nchar))
   }
@@ -88,7 +89,8 @@
 #' @export
 create_empty_zarr_array <- function(zarr_array_path, dim, chunk_dim, data_type,
                                     order = "F",
-                                    compressor = use_zlib(), fill_value, nchar,
+                                    compressor = use_zlib(), fill_value, 
+                                    nchar = NULL,
                                     dimension_separator = ".") {
   path <- .normalize_array_path(zarr_array_path)
   if (!dir.exists(path)) {
@@ -296,7 +298,7 @@ update_zarr_array <- function(zarr_array_path, x, index) {
   x <- array(x, dim = vapply(index, length, integer(1)))
 
   ## create all possible chunk names, then remove those that won't be touched
-  chunk_names <- expand.grid(lapply(zarr_dim %/% chunk_dim, seq_len)) - 1
+  chunk_names <- expand.grid(lapply(ceiling(zarr_dim / chunk_dim), seq_len)) - 1
   chunk_needed <- rep(FALSE, nrow(chunk_names))
   
   ## determine which chunk each of the requests indices belongs to
