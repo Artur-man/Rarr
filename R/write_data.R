@@ -33,7 +33,8 @@
 
   if (data_type %in% c("|S", "<U", ">U")) {
     if (is.null(nchar) || nchar < 1) {
-      stop("The 'nchar' argument must be provided and be a positive integer")
+      stop("The 'nchar' argument must be provided when working with ",
+           "character data types and be a positive integer")
     }
     data_type <- paste0(data_type, as.integer(nchar))
   }
@@ -88,7 +89,8 @@
 #' @export
 create_empty_zarr_array <- function(zarr_array_path, dim, chunk_dim, data_type,
                                     order = "F",
-                                    compressor = use_zlib(), fill_value, nchar,
+                                    compressor = use_zlib(), fill_value, 
+                                    nchar = NULL,
                                     dimension_separator = ".") {
   path <- .normalize_array_path(zarr_array_path)
   if (!dir.exists(path)) {
