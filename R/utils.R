@@ -110,8 +110,8 @@ check_index <- function(index, metadata) {
   } else {
     ## Replace all backward slash ("\\") with forward slash ("/")
     path <- gsub(x = path, pattern = "\\", replacement = "/", fixed = TRUE)
-    path <- normalizePath(path, winslash = "/", mustWork = FALSE)
-    root <- gsub(x = path, "(^[[:alnum:]:.]*/)(.*)", replacement = "\\1")
+    path <- R.utils::getAbsolutePath(path, expandTilde = TRUE)
+    root <- gsub(x = path, "(^[[:alnum:]:.]*/)?(.*)", replacement = "\\1")
     path <- gsub(x = path, "(^[[:alnum:]:.]*/)(.*)", replacement = "\\2")
   }
 
