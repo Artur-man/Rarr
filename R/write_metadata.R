@@ -66,12 +66,6 @@ write_zattrs <- function(path, new.zattrs = list(), overwrite = TRUE){
     
   if(file.exists(zattrs_path)){
     old.zattrs <- read_json(zattrs_path)
-    # if(overwrite){
-    #   old.zattrs <- old.zattrs[setdiff(names(old.zattrs), names(new.zattrs))]
-    # } else {
-    #   new.zattrs <- new.zattrs[setdiff(names(new.zattrs), names(old.zattrs))] 
-    # }
-    # new.zattrs <- c(old.zattrs, new.zattrs)
     new.zattrs <- if(overwrite) 
       modifyList(old.zattrs, new.zattrs) 
     else 

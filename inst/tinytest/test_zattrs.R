@@ -37,3 +37,11 @@ read.zattrs <- read_zattrs(path)
 zattrs[names(zattrs.new.elem)] <- "foo2"
 expect_true(all(names(read.zattrs) %in% names(zattrs)))
 expect_true(all(read.zattrs %in% zattrs))
+
+# test lists with empty names
+zattrs.new.elem <- list("empty", full = "full")
+expect_message(write_zattrs(path = path, new.zattrs = zattrs.new.elem))
+read.zattrs <- read_zattrs(path)
+zattrs[["full"]] <- "full"
+expect_true(all(names(read.zattrs) %in% names(zattrs)))
+expect_true(all(read.zattrs %in% zattrs))
