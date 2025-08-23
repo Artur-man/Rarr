@@ -32,7 +32,7 @@ expect_true(file.exists(file.path(output_zarr, "group3/subgroup1/subsubgroup1", 
 dir.create(td <- tempfile())
 name <- "test"
 output_zarr <- file.path(td, paste0(name, ".zarr"))
-expect_error(create_zarr(file = name, dir = td, version = "v4"), pattern = "only zarr v2 is supported")
+expect_error(create_zarr(file = name, dir = td, version = "v3"), pattern = "only zarr v2 is supported")
 
 # null dir
 dir.create(td2 <- tempfile())
