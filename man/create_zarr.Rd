@@ -4,12 +4,12 @@
 \alias{create_zarr}
 \title{create_zarr}
 \usage{
-create_zarr(dir, prefix, version = "v2")
+create_zarr(file, dir = NULL, version = "v2")
 }
 \arguments{
-\item{dir}{the location of zarr store}
+\item{file}{name of zarr store, with or without \code{.zarr} extension}
 
-\item{prefix}{prefix of the zarr store}
+\item{dir}{the location of zarr store}
 
 \item{version}{zarr version}
 }

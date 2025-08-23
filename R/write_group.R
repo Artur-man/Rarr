@@ -31,8 +31,8 @@ create_zarr_group <- function(store, name, version = "v2"){
 #'
 #' create zarr store
 #'
+#' @param file name of zarr store, with or without \code{.zarr} extension
 #' @param dir the location of zarr store
-#' @param prefix prefix of the zarr store
 #' @param version zarr version
 #' 
 #' @examples
@@ -42,6 +42,22 @@ create_zarr_group <- function(store, name, version = "v2"){
 #' dir.exists(file.path(td, "test.zarr"))
 #' 
 #' @export
-create_zarr <- function(dir, prefix, version = "v2"){
-  create_zarr_group(store = dir, name = paste0(prefix, ".zarr"), version = version)
+create_zarr <- function(file, dir = NULL, version = "v2"){
+  
+  # check extension
+  file <- if(grepl(".zarr$", file))
+    file 
+  else
+    paste0(file, ".zarr")
+  
+  # check directory is not NULL
+  if(is.null(dir)) {
+    dir <- dirname(file)
+    file <- basename(file)
+  }
+  if(!dir.exists(dir))
+    stop("The directory ", dir, " cannot be found!")
+  
+  # create zarr
+  create_zarr_group(store = dir, name = file, version = version)
 }

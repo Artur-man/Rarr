@@ -3,7 +3,7 @@ name <- "test"
 output_zarr <- file.path(td, paste0(name, ".zarr"))
 
 # open zarr
-create_zarr(dir = td, prefix = name)
+create_zarr(file = name, dir = td)
 expect_true(dir.exists(output_zarr))
 expect_true(file.exists(file.path(output_zarr, ".zgroup")))
 
@@ -32,4 +32,16 @@ expect_true(file.exists(file.path(output_zarr, "group3/subgroup1/subsubgroup1", 
 dir.create(td <- tempfile())
 name <- "test"
 output_zarr <- file.path(td, paste0(name, ".zarr"))
-expect_error(create_zarr(dir = td, prefix = name, version = "v4"), pattern = "only zarr v2 is supported")
+expect_error(create_zarr(file = name, dir = td, version = "v4"), pattern = "only zarr v2 is supported")
+
+# null dir
+dir.create(td2 <- tempfile())
+output_zarr <- file.path(td2, paste0(name, ".zarr"))
+create_zarr(file = output_zarr)
+expect_true(dir.exists(output_zarr))
+
+# no extension name for zarr zarr
+dir.create(td3 <- tempfile())
+output_zarr <- file.path(td3, name)
+create_zarr(file = output_zarr)
+expect_true(dir.exists(paste0(output_zarr, ".zarr")))
