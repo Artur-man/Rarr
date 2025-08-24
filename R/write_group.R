@@ -38,7 +38,7 @@ create_zarr_group <- function(store, name, version = "v2"){
 #' @examples
 #' dir.create(td <- tempfile())
 #' zarr_name <- "test"
-#' create_zarr(dir = td, prefix = "test")
+#' create_zarr(file = "test", dir = td)
 #' dir.exists(file.path(td, "test.zarr"))
 #' 
 #' @export

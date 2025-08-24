@@ -19,7 +19,7 @@ create zarr store
 \examples{
 dir.create(td <- tempfile())
 zarr_name <- "test"
-create_zarr(dir = td, prefix = "test")
+create_zarr(file = "test", dir = td)
 dir.exists(file.path(td, "test.zarr"))
 
 }
