@@ -51,6 +51,7 @@
 #'
 #' @importFrom jsonlite toJSON
 #'
+#' @importFrom utils modifyList
 #' @export
 write_zattrs <- function(path, new.zattrs = list(), overwrite = TRUE) {
   path <- .normalize_array_path(path)
