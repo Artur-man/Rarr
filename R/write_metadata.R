@@ -47,7 +47,7 @@
 #' @param path A character vector of length 1. This provides the
 #'   path to a Zarr array or group.
 #' @param new.zattrs a list inserted to .zattrs at the \code{path}.
-#' @param overwrite if TRUE, existing .zattrs elements will be overwritten by \code{new.zattrs}.
+#' @param overwrite if \code{TRUE} (the default), existing .zattrs elements will be overwritten by \code{new.zattrs}.
 #'
 #' @importFrom jsonlite toJSON
 #'

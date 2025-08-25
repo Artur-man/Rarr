@@ -12,7 +12,7 @@ path to a Zarr array or group.}
 
 \item{new.zattrs}{a list inserted to .zattrs at the \code{path}.}
 
-\item{overwrite}{if TRUE, existing .zattrs elements will be overwritten by \code{new.zattrs}.}
+\item{overwrite}{if \code{TRUE} (the default), existing .zattrs elements will be overwritten by \code{new.zattrs}.}
 }
 \description{
 Read the .zattrs file associated with a Zarr array or group
