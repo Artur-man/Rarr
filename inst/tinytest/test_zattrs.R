@@ -3,7 +3,8 @@ dir.create(td <- tempfile())
 path <- file.path(td, "test.zarr")
 x <- array(runif(n = 10), dim = c(2, 5))
 res <- write_zarr_array(
-  x = x, zarr_array_path = path,
+  x = x,
+  zarr_array_path = path,
   chunk_dim = c(2, 5)
 )
 
@@ -20,7 +21,7 @@ expect_equal(read.zattrs, zattrs)
 zattrs.new.elem <- list(foo2 = "foo")
 write_zattrs(path = path, new.zattrs = zattrs.new.elem)
 read.zattrs <- read_zattrs(path)
-expect_equal(read.zattrs, c(zattrs,zattrs.new.elem))
+expect_equal(read.zattrs, c(zattrs, zattrs.new.elem))
 
 # overwrite
 zattrs.new.elem <- list(foo2 = "foo2")
