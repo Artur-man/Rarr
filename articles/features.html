@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">Rarr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.11.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.11.16</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,7 @@
 
       <h1>Supported Zarr features in Rarr</h1>
             
-            <h4 data-toc-skip class="date">4 December 2025</h4>
+            <h4 data-toc-skip class="date">12 December 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Huber-group-EMBL/Rarr/blob/devel/vignettes/features.Rmd" class="external-link"><code>vignettes/features.Rmd</code></a></small>
       <div class="d-none name"><code>features.Rmd</code></div>
@@ -100,9 +100,9 @@ summarises the current status of datatype support. It will be updated as
 progress is made.</p>
 <table class="table">
 <colgroup>
-<col width="32%">
-<col width="47%">
-<col width="20%">
+<col width="29%">
+<col width="58%">
+<col width="12%">
 </colgroup>
 <thead><tr class="header">
 <th>Zarr Data Type</th>
@@ -117,7 +117,7 @@ progress is made.</p>
 </tr>
 <tr class="even">
 <td><code>int8</code></td>
-<td align="center">✔ / ❌</td>
+<td align="center">✔ / ✔</td>
 <td></td>
 </tr>
 <tr class="odd">
@@ -132,7 +132,7 @@ progress is made.</p>
 </tr>
 <tr class="odd">
 <td><code>uint16</code></td>
-<td align="center">✔ / ❌</td>
+<td align="center">✔ / ✔</td>
 <td></td>
 </tr>
 <tr class="even">
@@ -142,21 +142,21 @@ progress is made.</p>
 </tr>
 <tr class="odd">
 <td><code>uint32</code></td>
-<td align="center">✔ / ❌</td>
+<td align="center">✔ / ✔</td>
 <td>Values outside the range of <code>int32</code> are converted to
 <code>NA</code>. Future plan is to allow conversion to
 <code>double</code> or use the <a href="https://cran.r-project.org/package=bit64" class="external-link">bit64</a> package.</td>
 </tr>
 <tr class="even">
 <td><code>int64</code></td>
-<td align="center">✔ / ❌</td>
+<td align="center">✔ / ✔</td>
 <td>Values outside the range of <code>int32</code> are converted to
 <code>NA</code>. Future plan is to allow conversion to
 <code>double</code> or use the <a href="https://cran.r-project.org/package=bit64" class="external-link">bit64</a> package.</td>
 </tr>
 <tr class="odd">
 <td><code>uint64</code></td>
-<td align="center">✔ / ❌</td>
+<td align="center">✔ / ✔</td>
 <td>Values outside the range of <code>int32</code> are converted to
 <code>NA</code>. Future plan is to allow conversion to
 <code>double</code> or use the <a href="https://cran.r-project.org/package=bit64" class="external-link">bit64</a> package.</td>
@@ -235,7 +235,7 @@ loss of precision due to conversion.</td>
 <col width="17%">
 </colgroup>
 <thead><tr class="header">
-<th>Data Type</th>
+<th>Library</th>
 <th align="center">Status<br>(reading / writing)</th>
 <th>Notes</th>
 </tr></thead>
@@ -281,11 +281,6 @@ support for a required compression codec is missing.</p>
 <h4 id="other-codecs">Other codecs<a class="anchor" aria-label="anchor" href="#other-codecs"></a>
 </h4>
 <table class="table">
-<colgroup>
-<col width="22%">
-<col width="64%">
-<col width="14%">
-</colgroup>
 <thead><tr class="header">
 <th>Codec</th>
 <th align="center">Status<br>(reading / writing)</th>
@@ -300,7 +295,12 @@ support for a required compression codec is missing.</p>
 <tr class="even">
 <td><code>transpose</code></td>
 <td align="center">✔ / ✔</td>
-<td>Only the simple T/C case defined in v2</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>VLen-UTF8</code></td>
+<td align="center">✔ / ❌</td>
+<td></td>
 </tr>
 </tbody>
 </table>

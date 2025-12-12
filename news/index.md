@@ -11,6 +11,11 @@
   - boolean / logical
   - int8
   - int16
+  - int64 (up to values that can be represented as R integers)
+  - uint8
+  - uint16
+  - uint32 (up to values that can be represented as R integers)
+  - uint64 (up to values that can be represented as R integers)
   - float32 / single
 - Scalar arrays (i.e., arrays with zero dimensions) can now be read.
   Thanks to Artür Manukyan for the bug report.
@@ -21,6 +26,9 @@
   features in Rarr, available at
   <https://huber-group-embl.github.io/Rarr/articles/features.html>. This
   makes it more easily discoverable on the Bioconductor landing page.
+- Rarr initializes empty/missing chunks only once per read operation,
+  which significantly improves performance when reading arrays with many
+  missing chunks.
 
 ### Bug fixes
 
@@ -34,6 +42,10 @@
   arrays. This was introduced in
   <https://github.com/Huber-group-EMBL/Rarr/pull/45>. Thanks to Sharla
   Gelfand for reporting the issue and providing test data.
+- the `fill_value` is now correctly interpreted when reading Zarr v2
+  string or unicode arrays. This is visible for example when trying to
+  read missing chunks from such arrays. Thanks to Artür Manukyan for the
+  bug report.
 
 ### Internal changes
 
