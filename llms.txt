@@ -1,7 +1,5 @@
 # Zarr arrays with Rarr
 
-Mike L. Smith
-
 - [Introduction to Rarr](#introduction-to-rarr)
   - [Limitations with **Rarr**](#limitations-with-rarr)
 - [Quick start guide](#quick-start-guide)
@@ -38,9 +36,7 @@ directly.
 Currently, there are also limitations on the Zarr datatypes that can be
 accessed using **Rarr**. For now most numeric types can be read into R,
 although in some instances e.g. 64-bit integers there is potential for
-loss of information. Writing is more limited with support only for
-datatypes that are supported natively in R and only using the
-column-first representation.
+loss of information.
 
 See the dedicated [“Supported Zarr features”
 vignette](https://huber-group-embl.github.io/Rarr/articles/features.html)
@@ -52,12 +48,14 @@ for more information.
 
 If you want to quickly get started reading an existing Zarr array with
 the package, this section should have the essentials covered. First, we
-need to install **Rarr**[¹](#fn1) with the commands below.
+need to install **Rarr**[^1] with the commands below.
 
 ``` r
+
 ## we need BiocManager to perform the installation
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+if (!require("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
 ## install Rarr
 BiocManager::install("Rarr")
 ```
@@ -65,6 +63,7 @@ BiocManager::install("Rarr")
 Once **Rarr** is installed, we have to load it into our R session:
 
 ``` r
+
 library(Rarr)
 ```
 
@@ -77,8 +76,12 @@ To demonstrate reading a local file, we’ll pick the example file
 containing 32-bit integers arranged in the “column first” ordering.
 
 ``` r
+
 zarr_example <- system.file(
-  "extdata", "zarr_examples", "column-first", "int32.zarr",
+  "extdata",
+  "zarr_examples",
+  "column-first",
+  "int32.zarr",
   package = "Rarr"
 )
 ```
@@ -87,15 +90,16 @@ zarr_example <- system.file(
 
 We can get an summary of the array properties, such as its shape and
 datatype, using the function
-[`zarr_overview()`](https://huber-group-embl.github.io/Rarr/reference/zarr_overview.md)[²](#fn2).
+[`zarr_overview()`](https://huber-group-embl.github.io/Rarr/reference/zarr_overview.md)[^2].
 
 ``` r
+
 zarr_overview(zarr_example)
 ```
 
 ``` R
 ## Type: Array
-## Path: /tmp/RtmpF7Gmri/temp_libpath200434430aca/Rarr/extdata/zarr_examples/column-first/int32.zarr
+## Path: /tmp/Rtmp3ZvhzD/temp_libpath541a2b36c23a/Rarr/extdata/zarr_examples/column-first/int32.zarr
 ## Shape: 30 x 20 x 10
 ## Chunk Shape: 10 x 10 x 5
 ## No. of Chunks: 12 (3 x 2 x 2)
@@ -121,6 +125,7 @@ element of the list corresponding to the indices you want to extract in
 that dimension.
 
 ``` r
+
 index <- list(1:4, 1:2, 1)
 ```
 
@@ -128,12 +133,13 @@ We then extract the subset using
 [`read_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_array.md):
 
 ``` r
+
 read_zarr_array(zarr_example, index = index)
 ```
 
 ``` R
 ## , , 1
-##
+## 
 ##      [,1] [,2]
 ## [1,]    1    2
 ## [2,]    1    0
@@ -150,6 +156,7 @@ again use
 to quickly retrieve the array metadata.
 
 ``` r
+
 s3_address <- "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr/0"
 zarr_overview(s3_address)
 ```
@@ -172,6 +179,7 @@ Choosing to read only 2 of the 50 slices is much faster than if we opted
 to download the entire array before accessing the data.
 
 ``` r
+
 z2 <- read_zarr_array(s3_address, index = list(c(1, 10), NULL, NULL))
 ```
 
@@ -179,15 +187,21 @@ We then plot our two slices on top of one another using the
 [`image()`](https://rdrr.io/r/graphics/image.html) function.
 
 ``` r
+
 ## plot the first slice in blue
-image(log2(z2[1, , ]),
+image(
+  log2(z2[1, , ]),
   col = hsv(h = 0.6, v = 1, s = 1, alpha = 0:100 / 100),
-  asp = dim(z2)[2] / dim(z2)[3], axes = FALSE
+  asp = dim(z2)[2] / dim(z2)[3],
+  axes = FALSE
 )
 ## overlay the tenth slice in green
-image(log2(z2[2, , ]),
+image(
+  log2(z2[2, , ]),
   col = hsv(h = 0.3, v = 1, s = 1, alpha = 0:100 / 100),
-  asp = dim(z2)[2] / dim(z2)[3], axes = FALSE, add = TRUE
+  asp = dim(z2)[2] / dim(z2)[3],
+  axes = FALSE,
+  add = TRUE
 )
 ```
 
@@ -209,12 +223,18 @@ want to save as a Zarr. In this case it’s going to be a three
 dimensional array and store the values 1 to 600.
 
 ``` r
+
 x <- array(1:600, dim = c(10, 10, 6))
 ```
 
 ``` r
+
 path_to_new_zarr <- file.path(tempdir(), "new.zarr")
-write_zarr_array(x = x, zarr_array_path = path_to_new_zarr, chunk_dim = c(10, 5, 1))
+write_zarr_array(
+  x = x,
+  zarr_array_path = path_to_new_zarr,
+  chunk_dim = c(10, 5, 1)
+)
 ```
 
 We can check that the contents of the Zarr array is what we’re
@@ -228,12 +248,13 @@ reading the whole Zarr returns something equivalent to our original
 input `x`.
 
 ``` r
+
 read_zarr_array(zarr_array_path = path_to_new_zarr, index = list(6:10, 10, 1))
 ```
 
 ``` R
 ## , , 1
-##
+## 
 ##      [,1]
 ## [1,]   96
 ## [2,]   97
@@ -243,6 +264,7 @@ read_zarr_array(zarr_array_path = path_to_new_zarr, index = list(6:10, 10, 1))
 ```
 
 ``` r
+
 identical(read_zarr_array(zarr_array_path = path_to_new_zarr), x)
 ```
 
@@ -264,11 +286,9 @@ This only concerns users installing the package from source. If you are
 using the pre-built binaries for Windows or Mac OSX distributed by
 Bioconductor then this should not be an issue for you.
 
-------------------------------------------------------------------------
+[^1]: you only need to do the installation step once
 
-1.  you only need to do the installation step once
-
-2.  This is essentially reading and formatting the array metadata that
+[^2]: This is essentially reading and formatting the array metadata that
     accompanies any Zarr array.
 
 # Package index
@@ -278,7 +298,7 @@ Bioconductor then this should not be an issue for you.
 - [`read_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_array.md)
   : Read a Zarr array
 - [`zarr_overview()`](https://huber-group-embl.github.io/Rarr/reference/zarr_overview.md)
-  : Print a summary of a Zarr array
+  : Print a summary of a Zarr array or group
 - [`read_zarr_attributes()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_attributes.md)
   : Read the attributes associated with a Zarr array or group
 
@@ -286,30 +306,21 @@ Bioconductor then this should not be an issue for you.
 
 - [`write_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.md)
   : Write an R array to Zarr
-- [`ZarrRealizationSink`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`writeZarrArray`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`ZarrRealizationSink-class`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`write_block,ZarrRealizationSink-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`type,ZarrRealizationSink-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`chunkdim,ZarrRealizationSink-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`coerce,ZarrRealizationSink,ZarrMatrix-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`coerce,ZarrRealizationSink,ZarrArray-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`coerce,ZarrRealizationSink,ZarrArraySeed-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`coerce,ZarrRealizationSink,DelayedArray-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`coerce,ANY,ZarrArray-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`coerce,ANY,ZarrRealizationSink-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  : Write arrays to Zarr
 - [`write_zarr_attributes()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_attributes.md)
   : Read the .zattrs file associated with a Zarr array or group
 - [`update_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/update_zarr_array.md)
   : Update (a subset of) an existing Zarr array
 - [`create_empty_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/create_empty_zarr_array.md)
   : Create an (empty) Zarr array
+- [`zarr_consolidate_metadata()`](https://huber-group-embl.github.io/Rarr/reference/zarr_consolidate_metadata.md)
+  : Consolidate Zarr metadata files into a single file
 
-## Custom classes
+## Zarr stores and groups utilities
 
-- [`ZarrArray()`](https://huber-group-embl.github.io/Rarr/reference/ZarrArray-classes.md)
-  : ZarrArray constructor
+- [`zarr_overview()`](https://huber-group-embl.github.io/Rarr/reference/zarr_overview.md)
+  : Print a summary of a Zarr array or group
+- [`zarr_consolidate_metadata()`](https://huber-group-embl.github.io/Rarr/reference/zarr_consolidate_metadata.md)
+  : Consolidate Zarr metadata files into a single file
 
 ## Compression helpers
 
@@ -322,11 +333,21 @@ Bioconductor then this should not be an issue for you.
   [`use_zstd()`](https://huber-group-embl.github.io/Rarr/reference/compressors.md)
   : Define compression tool and settings
 
+## Deprecated functions
+
+- [`ZarrArray()`](https://huber-group-embl.github.io/Rarr/reference/ZarrArray-deprecated.md)
+  [`writeZarrArray()`](https://huber-group-embl.github.io/Rarr/reference/ZarrArray-deprecated.md)
+  **\[superseded\]** : Deprecated DelayedArray backend functions
+
 # Articles
 
 ### All vignettes
 
+- [Design principles for the Rarr
+  package](https://huber-group-embl.github.io/Rarr/articles/design.md):
 - [Supported Zarr features in
   Rarr](https://huber-group-embl.github.io/Rarr/articles/features.md):
 - [Working with Zarr arrays in
   R](https://huber-group-embl.github.io/Rarr/articles/Rarr.md):
+- [Working with \*\*remote\*\* Zarr arrays in
+  R](https://huber-group-embl.github.io/Rarr/articles/S3.md):

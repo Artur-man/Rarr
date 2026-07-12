@@ -1,4 +1,4 @@
-# Print a summary of a Zarr array
+# Print a summary of a Zarr array or group
 
 When reading a Zarr array using
 [`read_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_array.md)
@@ -10,7 +10,7 @@ array contains.
 ## Usage
 
 ``` r
-zarr_overview(zarr_array_path, s3_client, as_data_frame = FALSE)
+zarr_overview(zarr_array_path, s3_client = NULL, as_data_frame = FALSE)
 ```
 
 ## Arguments
@@ -63,6 +63,7 @@ print the details of all sub-arrays in the group.
 ## Examples
 
 ``` r
+
 ## Using a local file provided with the package
 z1 <- system.file("extdata", "zarr_examples", "row-first",
   "int32.zarr",
@@ -79,6 +80,7 @@ zarr_overview(zarr_array_path = z1)
 #> Data Type: int32
 #> Endianness: little
 #> Compressor: blosc
+#> Attributes: no
 
 ## using a file on S3 storage
 # \donttest{
@@ -92,5 +94,6 @@ zarr_overview(z2)
 #> Data Type: int32
 #> Endianness: little
 #> Compressor: blosc
+#> Attributes: yes
 # }
 ```

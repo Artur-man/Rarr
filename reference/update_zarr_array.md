@@ -34,6 +34,7 @@ Returns (invisibly) `TRUE` if the array is successfully updated.
 ## Examples
 
 ``` r
+
 ## first create a new, empty, Zarr array
 new_zarry_array <- file.path(tempdir(), "new_array.zarr")
 create_empty_zarr_array(
@@ -51,9 +52,9 @@ update_zarr_array(new_zarry_array, x = small_matrix, index = list(1:3, 1:2))
 ## we can see only the top left corner has been changed
 read_zarr_array(new_zarry_array, index = list(1:5, 1:5))
 #>           [,1]      [,2] [,3] [,4] [,5]
-#> [1,] 0.4841195 0.5454252    0    0    0
-#> [2,] 0.5674063 0.7596780    0    0    0
-#> [3,] 0.7539531 0.2129675    0    0    0
+#> [1,] 0.2383798 0.7234506    0    0    0
+#> [2,] 0.4116800 0.6145241    0    0    0
+#> [3,] 0.7460717 0.4739806    0    0    0
 #> [4,] 0.0000000 0.0000000    0    0    0
 #> [5,] 0.0000000 0.0000000    0    0    0
 ```

@@ -5,7 +5,7 @@ Read a Zarr array
 ## Usage
 
 ``` r
-read_zarr_array(zarr_array_path, index, s3_client)
+read_zarr_array(zarr_array_path, index, s3_client = NULL)
 ```
 
 ## Arguments
@@ -40,6 +40,7 @@ provided to the `index` argument.
 ## Examples
 
 ``` r
+
 ## Using a local file provided with the package
 ## This array has 3 dimensions
 z1 <- system.file("extdata", "zarr_examples", "row-first", "int32.zarr", package = "Rarr")

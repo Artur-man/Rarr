@@ -5,7 +5,7 @@
 - [`read_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_array.md)
   : Read a Zarr array
 - [`zarr_overview()`](https://huber-group-embl.github.io/Rarr/reference/zarr_overview.md)
-  : Print a summary of a Zarr array
+  : Print a summary of a Zarr array or group
 - [`read_zarr_attributes()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_attributes.md)
   : Read the attributes associated with a Zarr array or group
 
@@ -13,30 +13,21 @@
 
 - [`write_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.md)
   : Write an R array to Zarr
-- [`ZarrRealizationSink`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`writeZarrArray`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`ZarrRealizationSink-class`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`write_block,ZarrRealizationSink-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`type,ZarrRealizationSink-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`chunkdim,ZarrRealizationSink-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`coerce,ZarrRealizationSink,ZarrMatrix-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`coerce,ZarrRealizationSink,ZarrArray-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`coerce,ZarrRealizationSink,ZarrArraySeed-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`coerce,ZarrRealizationSink,DelayedArray-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`coerce,ANY,ZarrArray-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  [`coerce,ANY,ZarrRealizationSink-method`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
-  : Write arrays to Zarr
 - [`write_zarr_attributes()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_attributes.md)
   : Read the .zattrs file associated with a Zarr array or group
 - [`update_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/update_zarr_array.md)
   : Update (a subset of) an existing Zarr array
 - [`create_empty_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/create_empty_zarr_array.md)
   : Create an (empty) Zarr array
+- [`zarr_consolidate_metadata()`](https://huber-group-embl.github.io/Rarr/reference/zarr_consolidate_metadata.md)
+  : Consolidate Zarr metadata files into a single file
 
-## Custom classes
+## Zarr stores and groups utilities
 
-- [`ZarrArray()`](https://huber-group-embl.github.io/Rarr/reference/ZarrArray-classes.md)
-  : ZarrArray constructor
+- [`zarr_overview()`](https://huber-group-embl.github.io/Rarr/reference/zarr_overview.md)
+  : Print a summary of a Zarr array or group
+- [`zarr_consolidate_metadata()`](https://huber-group-embl.github.io/Rarr/reference/zarr_consolidate_metadata.md)
+  : Consolidate Zarr metadata files into a single file
 
 ## Compression helpers
 
@@ -48,3 +39,9 @@
   [`use_lz4()`](https://huber-group-embl.github.io/Rarr/reference/compressors.md)
   [`use_zstd()`](https://huber-group-embl.github.io/Rarr/reference/compressors.md)
   : Define compression tool and settings
+
+## Deprecated functions
+
+- [`ZarrArray()`](https://huber-group-embl.github.io/Rarr/reference/ZarrArray-deprecated.md)
+  [`writeZarrArray()`](https://huber-group-embl.github.io/Rarr/reference/ZarrArray-deprecated.md)
+  **\[superseded\]** : Deprecated DelayedArray backend functions

@@ -1,7 +1,7 @@
-# Rarr: Read Zarr Files in R
+# Rarr: A Simple and Performant Native R Reader & Writer for Zarr Arrays
 
 The Zarr specification defines a format for chunked, compressed,
-N-dimensional arrays. It's design allows efficient access to subsets of
+N-dimensional arrays. Its design allows efficient access to subsets of
 the stored array, and supports both local and cloud storage systems.
 Rarr aims to implement this specification in R with minimal reliance on
 an external tools or libraries.
@@ -23,6 +23,9 @@ Useful links:
 
 Authors:
 
+- Hugo Gruson <hugo.gruson@embl.de>
+  ([ORCID](https://orcid.org/0000-0002-4094-1476))
+
 - Mike Smith ([ORCID](https://orcid.org/0000-0002-7800-3848))
   (Maintainer from 2022 to 2025.) \[conceptor\]
 
@@ -32,4 +35,5 @@ Other contributors:
 
 - Sharla Gelfand \[contributor\]
 
-- German Network for Bioinformatics Infrastructure - de.NBI \[funder\]
+- German Network for Bioinformatics Infrastructure - de.NBI
+  ([ROR](https://ror.org/01vmpm840)) \[funder\]

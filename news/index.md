@@ -1,12 +1,146 @@
 # Changelog
 
-## Rarr 1.11
+## Rarr 2.1
+
+### Breaking changes
+
+- (Minor:) `s3_client =` argument default value in
+  [`read_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_array.md),
+  [`zarr_overview()`](https://huber-group-embl.github.io/Rarr/reference/zarr_overview.md),
+  etc. is now set to `NULL` instead of missing. In practice, we expect
+  this grant to be invisible to most users but it makes it easier to
+  pass down missing values in Rarr reverse dependencies.
+- The name and configuration options for the fixed-length-ascii (`|S` in
+  Zarr v2) and fixed-length-ucs4 (`<U` or `>U` in Zarr v2) data types
+  have been updated to `null_terminated_bytes` and `fixed_length_utf32`
+  respectively to match their newly specified format in Zarr v3.
+- Structured data types (record arrays) now always return lists as the
+  internal elements, instead of vectors as previously. This allows
+  structured data types to contain different data types in a single
+  element.
+- Unless `data_type` is specified explicitly, integers are now written
+  using the smallest possible bitsize based on the array `x` range in
+  [`write_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.md).
+
+### New features
+
+- [Zarr v3 struct
+  datatype](https://github.com/zarr-developers/zarr-extensions/tree/main/data-types/struct)
+  (equivalent to Zarr v2 structured datatype) is now supported.
+  [Deprecated Zarr v3 structured
+  datatype](https://github.com/zarr-developers/zarr-extensions/tree/main/data-types/structured)
+  is implemented as well, but only for reading, as per specification for
+  a deprecated type.
+- The new
+  [`zarr_consolidate_metadata()`](https://huber-group-embl.github.io/Rarr/reference/zarr_consolidate_metadata.md)
+  function consolidates metadata of all elements under a given group in
+  its associated `.zmetadata` (for Zarr v2 trees) or `zarr.json` (for
+  Zarr v3 trees). Creating this consolidated metadata has two benefits:
+  - better performance: the metadata of all elements under a group can
+    be accessed more efficiently since a single file needs to be read
+    instead of multiple smaller files.
+  - easier direct access of all the elements in a remote S3 store, even
+    though Rarr doesn’t have yet store-agnostic verbs to list, read,
+    etc. elements.
+- The `sharding_indexed` codec is now supported to read sharded Zarr
+  arrays.
+- [`zarr_overview()`](https://huber-group-embl.github.io/Rarr/reference/zarr_overview.md)
+  now returns a new logical field `attributes` indicating whether each
+  array has associated attributes.
+
+### Minor improvements
+
+- `normalize_array_path()` has been slightly optimized for speed. It is
+  not likely to have a significant impact if you reading a single large
+  array but can be noticed if you reading many attributes and small
+  arrays (as in some anndata objects).
+- Empty chunks, i.e., chunks were all elements are equal to the fill
+  value, are no longer written by
+  [`write_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.md),
+  saving disk space, and improving performance when reading it back.
+- More blosc options (`clevel`, `shuffle`, etc.) are exposed via
+  [`use_blosc()`](https://huber-group-embl.github.io/Rarr/reference/compressors.md).
+- Reading VLen-UTF8 arrays (used by default for `string` in v3) in now
+  much faster after rewriting the vlen-utf8 codec in C.
+- Unsupported data types are now caught explicitly and early early in
+  the reading pipeline rather than potentially failing or returning
+  incorrect output later.
+- Chunks larger than the whole array in one or multiple dimensions are
+  now permitted, based on a request by Artür Manukyan.
+- 0 is now a valid, and the default, compression level for Zstd. In
+  practice, it doesn’t have any effect because level 0 currently
+  corresponds to level 3.
+- Performance has been improved for writing and in the case where the
+  `index` argument in
+  [`read_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_array.md)
+  is a continuous sequence. One such example is when the entire array is
+  read (`index` argument missing).
+
+### Bug fixes
+
+- Using blosc compression via variable-length types such as when using
+  the vlen-utf8 filter / codec, is no longer causing R to crash.
+- [`zarr_overview()`](https://huber-group-embl.github.io/Rarr/reference/zarr_overview.md)
+  and
+  [`read_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_array.md)
+  on Zarr v3 files hosted on S3. Thanks to a report and a patch by Artür
+  Manukyan.
+- [`create_empty_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/create_empty_zarr_array.md)
+  and by extension
+  [`write_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.md)
+  now use the correct data type (`bool`) in metadata for boolean arrays.
+  Thanks to a report by Artür Manukyan.
+
+### Internal changes
+
+- A refactor reinforced shared the use of internal functions handling
+  indices across
+  [`read_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_array.md),
+  [`write_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.md),
+  and
+  [`update_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/update_zarr_array.md).
+  Some redundant internal functions have been merged. This reduced the
+  cyclomatic complexity in every function back to \<15 and it opens the
+  door to further optimizations which now only need to take place in a
+  single function.
+- Some code duplication has been removed by moving metadata file
+  existence in the lower-level shared utilities
+  [`.read_array_metadata()`](https://huber-group-embl.github.io/Rarr/reference/dot-read_array_metadata.md)
+  and
+  [`.read_consolidated_metadata()`](https://huber-group-embl.github.io/Rarr/reference/dot-read_consolidated_metadata.md).
+  While this is still discouraged, this also facilitates re-use of the
+  internal functions in other packages (e.g., ZarrArray).
+- Parsing Zarr v2 datatypes and the bytes codec decoding operation are
+  now handled internally by the new [grumpy CRAN
+  package](https://cran.r-project.org/package=grumpy).
+
+## Rarr 1.99
+
+### Breaking changes
+
+- The DelayedArray backend
+  ([`writeZarrArray()`](https://huber-group-embl.github.io/Rarr/reference/ZarrArray-deprecated.md)
+  and
+  [`ZarrArray()`](https://huber-group-embl.github.io/Rarr/reference/ZarrArray-deprecated.md)
+  functions) has been migrated to a separate, dedicated package. This
+  reduces the number of dependencies from 37 to 24. This also greatly
+  improves performance in for the standard case (when the DelayedArray
+  backend is not used).
+- [`write_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.md)
+  now writes Zarr v3 by default. Writing Zarr v2 is still possible by
+  explicitly setting the argument `zarr_version = 2`.
 
 ### New features
 
 - Zarr v3 arrays with data types and codecs that already existed in v2
   can now be read via
-  [`read_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_array.md).
+  [`read_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_array.md),
+  and written via
+  [`write_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.md).
+- Zarr v3 consolidated metadata is now returned by
+  [`zarr_overview()`](https://huber-group-embl.github.io/Rarr/reference/zarr_overview.md),
+  the same way it was already previously done for v2 consolidated
+  metadata.
 - More data types are available when writing Zarr arrays:
   - boolean / logical
   - int8
@@ -30,6 +164,21 @@
   [`zarr_overview()`](https://huber-group-embl.github.io/Rarr/reference/zarr_overview.md).
 - “Simple” structured data types (i.e., only one level of nesting and no
   arrays) can now be read from Zarr v2 arrays.
+- `simplifyVector = FALSE` is added to `fromJSON` in
+  [`read_zarr_attributes()`](https://huber-group-embl.github.io/Rarr/reference/read_zarr_attributes.md),
+  thus attributes of both local and s3 zarr stores are read identically.
+- The `dimension_names` optional field is support in both v2 (not
+  strictly part of the spec) and v3. It is mapped to
+  `names(dimnames(.))` in R.
+- `NA_real_` is now an allowed fill value in
+  [`write_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.md)
+  when writing numeric arrays, following a request from Hervé Pagès.
+- Fill values stored as their byte representation are now understood
+  when reading Zarr arrays.
+- [`write_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.md)
+  now supports writing `NA_character_`, which means it is possible to
+  preserve `NA`s when roundtriping an R character array, based on a
+  request from Hervé Pagès.
 
 ### Minor improvements
 
@@ -47,6 +196,14 @@
   Manukyan for the bug report and pull request.
 - Empty zarr arrays (i.e., arrays with `shape` and `chunks` equal zero)
   can now be written.
+- Compression for writing Zarr arrays now default to zstd rather than
+  zlib. zstd achieves similar or better compression levels while being
+  much faster at compressing (= writing Zarr arrays) and decompressing
+  (= reading Zarr arrays). This matches the default used by Zarr Python
+  implementation.
+- [`write_zarr_array()`](https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.md)
+  now fails early with an explicit error message when `x` is not an
+  array.
 
 ### Bug fixes
 
@@ -78,6 +235,9 @@
   - snappy 1.1.1 -\> 1.2.2
   - zstd 1.5.5 -\> 1.5.7
   - lz4 1.9.2 -\> 1.10.0
+- Resizable vector in C code for compression now uses the official
+  exported R C API, instead of internal R functions.
+- The `const` qualifier is used where appropriate in the C code.
 
 ## Rarr 1.9
 
@@ -114,10 +274,10 @@
 
 - `.url_parse_other()` now accounts for port numbers in host name and
   colons in S3 buckets.
-- [`writeZarrArray()`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
+- [`writeZarrArray()`](https://huber-group-embl.github.io/Rarr/reference/ZarrArray-deprecated.md)
   now allows writing character arrays, and no longer errors complaining
   about null ‘nchar’ argument value. Default of ‘nchar’ is now `NULL`.
-- [`writeZarrArray()`](https://huber-group-embl.github.io/Rarr/reference/ZarrRealizationSink.md)
+- [`writeZarrArray()`](https://huber-group-embl.github.io/Rarr/reference/ZarrArray-deprecated.md)
   no longer silently and incorrectly fills the last rows/columns when
   `dim` is not divisible by `chunk_dim`.
 - The object name is no longer repeated (e.g., `name.zarrname.zarr`)
@@ -165,9 +325,8 @@
 
 ## Rarr 1.7
 
-- Added [`path()`](https://rdrr.io/pkg/BiocGenerics/man/path.html)
-  method for `ZarrArray` class that returns the location of the zarr
-  array root.
+- Added `path()` method for `ZarrArray` class that returns the location
+  of the zarr array root.
 - Removed used of non-API call `SETLENGTH` in C code.
 - Small changes to compilation of internal blosc libraries to cope with
   the C23 compiler becoming the default in R-4.5.0
